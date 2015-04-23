@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 )
 
@@ -9,5 +10,6 @@ func main() {
 }
 
 func realMain() int {
+	fmt.Printf("chromedriver_helper v%s\n", Version)
 	return 0
 }
