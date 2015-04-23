@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 
-	"github.com/a2ikm/chromedriver_helper/chromedriver_helper"
+	"github.com/mitchellh/cli"
 )
 
 func main() {
@@ -13,14 +14,40 @@ func main() {
 }
 
 func realMain() int {
-	fmt.Printf("chromedriver_helper v%s\n", chromedriver_helper.Version)
+	log.SetOutput(ioutil.Discard)
 
-	path, err := chromedriver_helper.Path()
+	args := os.Args[1:]
+	for _, arg := range args {
+		if arg == "-v" || arg == "--version" {
+			newArgs := make([]string, len(args)+1)
+			newArgs[0] = "version"
+			copy(newArgs[1:], args)
+			args = newArgs
+			break
+		}
+	}
+
+	cli := &cli.CLI{
+		Args:     args,
+		Commands: commands(),
+		HelpFunc: cli.BasicHelpFunc("chromedriver_helper"),
+	}
+
+	exitCode, err := cli.Run()
 	if err != nil {
-		log.Fatal(err)
+		fmt.Fprintf(os.Stderr, "Error executing CLI: %s\n", err.Error())
 		return 1
 	}
 
-	fmt.Printf("binary path = %s\n", path)
+	return exitCode
+
 	return 0
+}
+
+func commands() map[string]cli.CommandFactory {
+	return map[string]cli.CommandFactory{
+		"version": func() (cli.Command, error) {
+			return &CmdVersion{}, nil
+		},
+	}
 }
