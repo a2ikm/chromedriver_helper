@@ -13,7 +13,7 @@ func main() {
 }
 
 func realMain() int {
-	fmt.Printf("chromedriver_helper v%s\n", Version)
+	fmt.Printf("chromedriver_helper v%s\n", chromedriver_helper.Version)
 
 	path, err := chromedriver_helper.Path()
 	if err != nil {
