@@ -1,8 +1,14 @@
 package bucket
 
 import (
+	"errors"
+	"regexp"
 	"strconv"
-	"strings"
+)
+
+var (
+	KeyRegexp  = regexp.MustCompile("\\A(\\d+)\\.(\\d+)/chromedriver_([a-z0-9]+)\\.zip\\z")
+	ParseError = errors.New("parse error")
 )
 
 type Release struct {
@@ -17,14 +23,10 @@ type Version struct {
 }
 
 func NewRelease(key string) (*Release, error) {
-	comp := strings.Split(key, "/")
-
-	major, minor, err := parseVersion(comp[0])
+	major, minor, platform, err := parseKey(key)
 	if err != nil {
-		return &Release{}, err
+		return nil, ParseError
 	}
-
-	platform := parsePlatform(comp[1])
 
 	return &Release{
 		Key:      key,
@@ -36,21 +38,15 @@ func NewRelease(key string) (*Release, error) {
 	}, nil
 }
 
-func parseVersion(version string) (int, int, error) {
-	comp := strings.Split(version, ".")
-	major, err := strconv.Atoi(comp[0])
-	if err != nil {
-		return 0, 0, err
+func parseKey(key string) (int, int, string, error) {
+	matches := KeyRegexp.FindStringSubmatch(key)
+	if matches == nil {
+		return 0, 0, "", ParseError
 	}
-	minor, err := strconv.Atoi(comp[1])
-	if err != nil {
-		return 0, 0, err
-	}
-	return major, minor, nil
-}
 
-func parsePlatform(filename string) string {
-	comp1 := strings.Split(filename, ".")
-	comp2 := strings.Split(comp1[0], "_")
-	return comp2[1]
+	major, _ := strconv.Atoi(matches[1])
+	minor, _ := strconv.Atoi(matches[2])
+	platform := matches[3]
+
+	return major, minor, platform, nil
 }
