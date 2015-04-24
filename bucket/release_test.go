@@ -22,3 +22,12 @@ func TestReleaseNewRelease(t *testing.T) {
 		t.Fatalf("Release.Platform missmatch, expected: `linux32`, actual: `%d`", release.Platform)
 	}
 }
+
+func TestReleaseURL(t *testing.T) {
+	release, _ := NewRelease("2.0/chromedriver_linux32.zip")
+
+	expected := "http://chromedriver.storage.googleapis.com/2.0/chromedriver_linux32.zip"
+	if release.URL() != expected {
+		t.Fatalf("Release.URL() missmatch, expected: `%s`, actual: `%s`", expected, release.URL())
+	}
+}

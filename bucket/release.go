@@ -50,3 +50,7 @@ func parseKey(key string) (int, int, string, error) {
 
 	return major, minor, platform, nil
 }
+
+func (r *Release) URL() string {
+	return BucketURL + (*r).Key
+}
