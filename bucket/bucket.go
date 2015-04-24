@@ -65,5 +65,6 @@ func ParseXML(in io.Reader) (*ReleaseList, error) {
 		list = list.Append(release)
 	}
 
+	list.Sort()
 	return list, nil
 }
