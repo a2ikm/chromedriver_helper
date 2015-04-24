@@ -47,7 +47,7 @@ func ParseXML(in io.Reader) (*ReleaseList, error) {
 				return nil, err
 			}
 		}
-		list.add(*release)
+		list = list.Append(release)
 	}
 
 	return list, nil

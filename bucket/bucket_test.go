@@ -1,6 +1,7 @@
 package bucket
 
 import (
+	"bytes"
 	"testing"
 )
 
@@ -24,15 +25,18 @@ func TestBucketParseXML(t *testing.T) {
   </ListBucketResult>
   `)
 
-	in := byte.NewReader(data)
+	in := bytes.NewReader(data)
 	list, err := ParseXML(in)
+	if err != nil {
+		t.Fatalf("fatal")
+	}
 
-	length := len(list)
+	length := list.Len()
 	if length != 1 {
 		t.Fatalf("length missmatch, %d", length)
 	}
 
-	r := list[0]
+	r := list.Index(0)
 	if r.Key != "2.0/chromedriver_linux32.zip" {
 		t.Fatalf("Release.Key missmatch, `%s`", r.Key)
 	}
