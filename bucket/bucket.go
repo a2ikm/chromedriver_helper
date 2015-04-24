@@ -4,6 +4,11 @@ import (
 	"encoding/xml"
 	"io"
 	"io/ioutil"
+	"net/http"
+)
+
+var (
+	BucketURL = "http://chromedriver.storage.googleapis.com/"
 )
 
 type ListBucketResult struct {
@@ -22,6 +27,16 @@ type Contents struct {
 	ETag           string
 	Size           int
 	Owner          string
+}
+
+func DownloadReleaseList() (*ReleaseList, error) {
+	res, err := http.Get(BucketURL)
+	if err != nil {
+		return nil, err
+	}
+
+	defer res.Body.Close()
+	return ParseXML(res.Body)
 }
 
 func ParseXML(in io.Reader) (*ReleaseList, error) {
