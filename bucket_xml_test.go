@@ -71,3 +71,36 @@ func TestParseBucketXML(t *testing.T) {
 		t.Fatalf("Contents.Size missmatch, expected: `7262134`, actual: `%d`", contents.Size)
 	}
 }
+
+func TestContentsConvertToRelease(t *testing.T) {
+	contents := Contents{
+		Key:            "2.0/chromedriver_linux32.zip",
+		Generation:     1380149859530000,
+		MetaGeneration: 2,
+		LastModified:   "2013-09-25T22:57:39.349Z",
+		ETag:           "\"c0d96102715c4916b872f91f5bf9b12c\"",
+		Size:           7262134,
+		Owner:          "",
+	}
+
+	release, err := contents.ConvertToRelease()
+	if err != nil {
+		t.Fatalf("error")
+	}
+
+	if release.Key != "2.0/chromedriver_linux32.zip" {
+		t.Fatalf("Release.Key missmatch, expected: `2.0/chromedriver_linux32.zip`, actual: `%s`", release.Key)
+	}
+
+	if release.Platform != "linux32" {
+		t.Fatalf("Release.Platform missmatch, expected: `linux32`, actual: `%s`", release.Platform)
+	}
+
+	if release.Version.Major != 2 {
+		t.Fatalf("Release.Version.Major missmatch, expected: `2`, actual: `%d`", release.Version.Major)
+	}
+
+	if release.Version.Minor != 0 {
+		t.Fatalf("Release.Version.Minor missmatch, expected: `0`, actual: `%d`", release.Version.Minor)
+	}
+}
