@@ -49,3 +49,22 @@ func TestReleaseListSort(t *testing.T) {
 		t.Fatalf("missmatch, %s", list.Index(0).Key)
 	}
 }
+
+func TestReleaseListFilter(t *testing.T) {
+	list := NewReleaseList()
+	release1, _ := NewRelease("2.1/chromedriver_linux32.zip")
+	release2, _ := NewRelease("2.10/chromedriver_linux64.zip")
+
+	list = list.Append(release1)
+	list = list.Append(release2)
+
+	list = list.FilterByPlatform("linux32")
+	if list.Len() != 1 {
+		t.Fatalf("missmatch, %d", list.Len())
+	}
+
+	release := list.Index(0)
+	if (*release).Key != "2.1/chromedriver_linux32.zip" {
+		t.Fatalf("missmatch, %s", (*release).Key)
+	}
+}
