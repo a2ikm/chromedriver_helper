@@ -40,3 +40,13 @@ func (list *ReleaseList) Less(i, j int) bool {
 func (list *ReleaseList) Sort() {
 	sort.Sort(list)
 }
+
+func (list *ReleaseList) FilterByPlatform(platform string) *ReleaseList {
+	newList := NewReleaseList()
+	for _, release := range *list {
+		if release.Platform == platform {
+			newList = newList.Append(&release)
+		}
+	}
+	return newList
+}
