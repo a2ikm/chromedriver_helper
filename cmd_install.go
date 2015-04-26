@@ -3,8 +3,10 @@ package main
 import (
 	"archive/zip"
 	"bytes"
+	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 
@@ -21,6 +23,7 @@ func (c *CmdInstall) Help() string {
 func (c *CmdInstall) Run(args []string) int {
 	err := c.RealRun()
 	if err != nil {
+		log.Fatalln(err.Error())
 		return 1
 	}
 
@@ -41,6 +44,8 @@ func (c *CmdInstall) RealRun() error {
 }
 
 func (c *CmdInstall) TargetRelease() (*bucket.Release, error) {
+	fmt.Println("Getting released versions")
+
 	platform, err := chromedriver_helper.Platform()
 	if err != nil {
 		return nil, err
@@ -55,6 +60,8 @@ func (c *CmdInstall) TargetRelease() (*bucket.Release, error) {
 }
 
 func (c *CmdInstall) Install(release *bucket.Release) error {
+	fmt.Printf("Installing %s\n", release.Key)
+
 	url := release.URL()
 	res, err := http.Get(url)
 	if err != nil {
