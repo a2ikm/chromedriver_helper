@@ -60,7 +60,7 @@ func (c *CmdInstall) targetRelease() (*bucket.Release, error) {
 		return nil, err
 	}
 
-	release, err := bucket.LatestReleaseForPlatform(platform)
+	release, err := bucket.LatestRelease(platform)
 	if err != nil {
 		return nil, err
 	}
