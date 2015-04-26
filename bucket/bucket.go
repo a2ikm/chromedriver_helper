@@ -69,7 +69,7 @@ func ParseXML(in io.Reader) (*ReleaseList, error) {
 	return list, nil
 }
 
-func LatestReleaseForPlatform(platform string) (*Release, error) {
+func LatestRelease(platform string) (*Release, error) {
 	list, err := DownloadReleaseList()
 	if err != nil {
 		return nil, err

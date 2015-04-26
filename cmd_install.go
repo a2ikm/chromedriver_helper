@@ -21,7 +21,7 @@ func (c *CmdInstall) Help() string {
 }
 
 func (c *CmdInstall) Run(args []string) int {
-	err := c.RealRun()
+	err := c.realRun()
 	if err != nil {
 		log.Fatalln(err.Error())
 		return 1
@@ -34,24 +34,33 @@ func (c *CmdInstall) Synopsis() string {
 	return ""
 }
 
-func (c *CmdInstall) RealRun() error {
-	release, err := c.TargetRelease()
+func (c *CmdInstall) realRun() error {
+	fmt.Println("Getting released versions")
+
+	release, err := c.targetRelease()
 	if err != nil {
 		return err
 	}
 
-	return c.Install(release)
+	fmt.Printf("Installing %s\n", release.Key)
+
+	rc, err := c.download(release)
+	if err != nil {
+		return err
+	}
+	defer rc.Close()
+
+	return c.install(rc)
 }
 
-func (c *CmdInstall) TargetRelease() (*bucket.Release, error) {
-	fmt.Println("Getting released versions")
+func (c *CmdInstall) targetRelease() (*bucket.Release, error) {
 
 	platform, err := chromedriver_helper.Platform()
 	if err != nil {
 		return nil, err
 	}
 
-	release, err := bucket.LatestReleaseForPlatform(platform)
+	release, err := bucket.LatestRelease(platform)
 	if err != nil {
 		return nil, err
 	}
@@ -59,35 +68,36 @@ func (c *CmdInstall) TargetRelease() (*bucket.Release, error) {
 	return release, nil
 }
 
-func (c *CmdInstall) Install(release *bucket.Release) error {
-	fmt.Printf("Installing %s\n", release.Key)
-
+func (c *CmdInstall) download(release *bucket.Release) (io.ReadCloser, error) {
 	url := release.URL()
 	res, err := http.Get(url)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer res.Body.Close()
 
 	b, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	readerAt := bytes.NewReader(b)
 	reader, err := zip.NewReader(readerAt, res.ContentLength)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
 	f := reader.File[0]
 	rc, err := f.Open()
 	if err != nil {
-		return err
+		return nil, err
 	}
-	defer rc.Close()
 
-	err = chromedriver_helper.PrepareDir()
+	return rc, nil
+}
+
+func (c *CmdInstall) install(rc io.ReadCloser) error {
+	err := chromedriver_helper.PrepareDir()
 	if err != nil {
 		return err
 	}
@@ -97,15 +107,15 @@ func (c *CmdInstall) Install(release *bucket.Release) error {
 		return err
 	}
 
-	f2, err := os.OpenFile(path,
+	f, err := os.OpenFile(path,
 		os.O_WRONLY|os.O_CREATE|os.O_TRUNC,
-		f.Mode())
+		0755)
 	if err != nil {
 		return err
 	}
-	defer f2.Close()
+	defer f.Close()
 
-	_, err = io.Copy(f2, rc)
+	_, err = io.Copy(f, rc)
 	if err != nil {
 		return err
 	}
