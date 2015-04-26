@@ -29,11 +29,11 @@ func (list *ReleaseList) Swap(i, j int) {
 }
 
 func (list *ReleaseList) Less(i, j int) bool {
-	l := *list
-	if l[i].Version.Major == l[j].Version.Major {
-		return l[i].Version.Minor < l[j].Version.Minor
+	vi, vj := list.Index(i).Version, list.Index(j).Version
+	if vi.Major == vj.Major {
+		return vi.Minor < vj.Minor
 	} else {
-		return l[i].Version.Major < l[j].Version.Major
+		return vi.Major < vj.Major
 	}
 }
 
