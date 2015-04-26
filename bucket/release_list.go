@@ -4,14 +4,14 @@ import (
 	"sort"
 )
 
-type ReleaseList []Release
+type ReleaseList []*Release
 
 func NewReleaseList() *ReleaseList {
 	return &ReleaseList{}
 }
 
 func (list *ReleaseList) Append(release *Release) *ReleaseList {
-	newList := append(*list, *release)
+	newList := append(*list, release)
 	return &newList
 }
 
@@ -20,7 +20,7 @@ func (list *ReleaseList) Len() int {
 }
 
 func (list *ReleaseList) Index(i int) *Release {
-	return &(*list)[i]
+	return (*list)[i]
 }
 
 func (list *ReleaseList) Swap(i, j int) {
@@ -45,7 +45,7 @@ func (list *ReleaseList) FilterByPlatform(platform string) *ReleaseList {
 	newList := NewReleaseList()
 	for _, release := range *list {
 		if release.Platform == platform {
-			newList = newList.Append(&release)
+			newList = newList.Append(release)
 		}
 	}
 	return newList
