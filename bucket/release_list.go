@@ -50,3 +50,13 @@ func (list *ReleaseList) FilterByPlatform(platform string) *ReleaseList {
 	}
 	return newList
 }
+
+func (list *ReleaseList) Latest() *Release {
+	list.Sort()
+	length := list.Len()
+	if length > 0 {
+		return list.Index(length - 1)
+	} else {
+		return nil
+	}
+}

@@ -68,3 +68,12 @@ func ParseXML(in io.Reader) (*ReleaseList, error) {
 	list.Sort()
 	return list, nil
 }
+
+func LatestReleaseForPlatform(platform string) (*Release, error) {
+	list, err := DownloadReleaseList()
+	if err != nil {
+		return nil, err
+	}
+
+	return list.FilterByPlatform(platform).Latest(), nil
+}

@@ -46,6 +46,10 @@ func realMain() int {
 
 func commands() map[string]cli.CommandFactory {
 	return map[string]cli.CommandFactory{
+		"install": func() (cli.Command, error) {
+			return &CmdInstall{}, nil
+		},
+
 		"installed": func() (cli.Command, error) {
 			return &CmdInstalled{}, nil
 		},

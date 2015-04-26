@@ -49,6 +49,15 @@ func Platform() (string, error) {
 	return "", NotSupportedError
 }
 
+func PrepareDir() error {
+	dir, err := Dir()
+	if err != nil {
+		return err
+	}
+
+	return os.MkdirAll(dir, 0755)
+}
+
 func Path() (string, error) {
 	dir, err := Dir()
 	if err != nil {
