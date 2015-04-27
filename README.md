@@ -8,7 +8,7 @@ This is a clone of [chromedriver-helper](https://rubygems.org/gems/chromedriver-
 `chromedriver_helper` provides some commands to install and manage a [chromedriver](https://sites.google.com/a/chromium.org/chromedriver/) executable, and some functions to access it.
 
 
-## Command Line Tools
+## As Command Line Tool
 
 ### Installation
 
@@ -22,7 +22,7 @@ To install latest version, run `install` command:
 
 This will install `chromedriver` to `~/.chromedriver-helper`.
 
-If you want to tell what version is installed, run `installed` command:
+If you want to tell what version of chromedriver is installed, run `installed` command:
 
     $ chromedriver_helper installed
 
