@@ -5,7 +5,7 @@ chromedriver_helper in Go
 
 This is a clone of [chromedriver-helper](https://rubygems.org/gems/chromedriver-helper) written in Go.
 
-`chromedriver_helper` provides some commands to install and manage a [chromedriver](https://sites.google.com/a/chromium.org/chromedriver/) executable, and some functions to access it.
+chromedriver_helper provides some commands to install and manage a [chromedriver](https://sites.google.com/a/chromium.org/chromedriver/) executable, and some functions to access it.
 
 
 ## As Command Line Tool
@@ -21,6 +21,8 @@ To install latest version, run `install` command:
     $ chromedriver_helper install
 
 This will install `chromedriver` to `~/.chromedriver-helper`.
+
+Note that chromedriver_helper doesn't use the platform specific directory like `~/.chromedriver-helper/linux64`, and place chromedriver just below `~/.chromedriver-helper` like `~/.chromedriver-helper/chromedriver`. This is different from original [chromedriver-helper](https://rubygems.org/gems/chromedriver-helper).
 
 If you want to tell what version of chromedriver is installed, run `installed` command:
 
