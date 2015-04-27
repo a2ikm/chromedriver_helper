@@ -2,7 +2,6 @@ package chromedriver_helper
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"os/exec"
 	"path"
@@ -64,8 +63,7 @@ func InstalledVersion() (string, error) {
 		return "", err
 	}
 
-	cmd := fmt.Sprintf("%s --version", path)
-	out, err := exec.Command(cmd).Output()
+	out, err := exec.Command(path, "--version").Output()
 	if err != nil {
 		return "", err
 	}
