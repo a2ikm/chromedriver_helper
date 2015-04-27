@@ -13,9 +13,8 @@ import (
 )
 
 var (
-	NotSupportedError = errors.New("not supported")
-	ParseError        = errors.New("parse error")
-	VersionRegexp     = regexp.MustCompile("\\AChromeDriver (\\d+\\.\\d+)")
+	ParseError    = errors.New("parse error")
+	VersionRegexp = regexp.MustCompile("\\AChromeDriver (\\d+\\.\\d+)")
 )
 
 func Name() string {
@@ -33,20 +32,6 @@ func Dir() (string, error) {
 	}
 
 	return path.Join(home, ".chromedriver-helper"), nil
-}
-
-func Platform() (string, error) {
-	switch runtime.GOOS {
-	case "windows":
-		return "win32", nil
-	case "darwin":
-		return "mac32", nil
-	case "linux":
-		// TODO 64 bit support
-		return "linux32", nil
-	}
-
-	return "", NotSupportedError
 }
 
 func PrepareDir() error {
