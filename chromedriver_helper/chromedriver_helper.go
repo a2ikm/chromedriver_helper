@@ -17,7 +17,7 @@ var (
 	VersionRegexp = regexp.MustCompile("\\AChromeDriver (\\d+\\.\\d+)")
 )
 
-func Name() string {
+func BinaryName() string {
 	if runtime.GOOS == "windows" {
 		return "chromedriver.exe"
 	}
@@ -25,7 +25,17 @@ func Name() string {
 	return "chromedriver"
 }
 
-func Dir() (string, error) {
+func BinaryPath() (string, error) {
+	dir, err := InstallDir()
+	if err != nil {
+		return "", err
+	}
+
+	name := BinaryName()
+	return path.Join(dir, name), nil
+}
+
+func InstallDir() (string, error) {
 	home, err := homedir.Dir()
 	if err != nil {
 		return "", err
@@ -34,8 +44,8 @@ func Dir() (string, error) {
 	return path.Join(home, ".chromedriver-helper"), nil
 }
 
-func PrepareDir() error {
-	dir, err := Dir()
+func MakeInstallDir() error {
+	dir, err := InstallDir()
 	if err != nil {
 		return err
 	}
@@ -43,17 +53,8 @@ func PrepareDir() error {
 	return os.MkdirAll(dir, 0755)
 }
 
-func Path() (string, error) {
-	dir, err := Dir()
-	if err != nil {
-		return "", err
-	}
-
-	return path.Join(dir, Name()), nil
-}
-
 func InstalledVersion() (string, error) {
-	path, err := Path()
+	path, err := BinaryPath()
 	if err != nil {
 		return "", err
 	}

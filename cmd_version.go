@@ -28,7 +28,7 @@ func (c *CmdVersion) printVersion() {
 }
 
 func (c *CmdVersion) printChromedriverPath() {
-	path, err := chromedriver_helper.Path()
+	path, err := chromedriver_helper.BinaryPath()
 	if err != nil {
 		log.Fatal(err)
 		return

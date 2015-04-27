@@ -97,12 +97,12 @@ func (c *CmdInstall) download(release *bucket.Release) (io.ReadCloser, error) {
 }
 
 func (c *CmdInstall) install(rc io.ReadCloser) error {
-	err := chromedriver_helper.PrepareDir()
+	err := chromedriver_helper.MakeInstallDir()
 	if err != nil {
 		return err
 	}
 
-	path, err := chromedriver_helper.Path()
+	path, err := chromedriver_helper.BinaryPath()
 	if err != nil {
 		return err
 	}
