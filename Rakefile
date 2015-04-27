@@ -3,6 +3,11 @@ task :build do
   sh "go build -o bin/chromedriver_helper"
 end
 
+desc "Run go install"
+task :install do
+  sh "go install"
+end
+
 desc "Run test"
 task :test do
   src_path = File.join(ENV["GOPATH"], "src")
