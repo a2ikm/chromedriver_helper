@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	DefaultBucket = NewBucketWithURL("http://chromedriver.storage.googleapis.com/")
+	DefaultBucket = NewBucket("http://chromedriver.storage.googleapis.com/")
 )
 
 var (
@@ -34,11 +34,7 @@ type Release struct {
 	Platform     string
 }
 
-func NewBucket() *Bucket {
-	return NewBucketWithURL(BucketURL)
-}
-
-func NewBucketWithURL(url string) *Bucket {
+func NewBucket(url string) *Bucket {
 	return &Bucket{
 		URL: url,
 	}
