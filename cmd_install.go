@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/a2ikm/chromedriver_helper/bucket"
 	"github.com/a2ikm/chromedriver_helper/chromedriver_helper"
 )
 
@@ -42,7 +41,7 @@ func (c *CmdInstall) realRun() error {
 		return err
 	}
 
-	fmt.Printf("Installing %s\n", release.Key)
+	fmt.Printf("Installing %s\n", release.Key())
 
 	rc, err := c.download(release)
 	if err != nil {
@@ -53,14 +52,14 @@ func (c *CmdInstall) realRun() error {
 	return c.install(rc)
 }
 
-func (c *CmdInstall) targetRelease() (*bucket.Release, error) {
+func (c *CmdInstall) targetRelease() (*chromedriver_helper.Release, error) {
 
 	platform, err := chromedriver_helper.Platform()
 	if err != nil {
 		return nil, err
 	}
 
-	release, err := bucket.LatestRelease(platform)
+	release, err := chromedriver_helper.LatestRelease(platform)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +67,7 @@ func (c *CmdInstall) targetRelease() (*bucket.Release, error) {
 	return release, nil
 }
 
-func (c *CmdInstall) download(release *bucket.Release) (io.ReadCloser, error) {
+func (c *CmdInstall) download(release *chromedriver_helper.Release) (io.ReadCloser, error) {
 	url := release.URL()
 	res, err := http.Get(url)
 	if err != nil {
