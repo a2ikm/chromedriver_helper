@@ -12,8 +12,8 @@ import (
 	"strings"
 )
 
-const (
-	BucketURL = "http://chromedriver.storage.googleapis.com/"
+var (
+	DefaultBucket = NewBucketWithURL("http://chromedriver.storage.googleapis.com/")
 )
 
 var (
@@ -45,8 +45,7 @@ func NewBucketWithURL(url string) *Bucket {
 }
 
 func LatestRelease(platform string) (*Release, error) {
-	bucket := NewBucket()
-	return bucket.LatestRelease(platform)
+	return DefaultBucket.LatestRelease(platform)
 }
 
 func (b *Bucket) LatestRelease(platform string) (*Release, error) {
