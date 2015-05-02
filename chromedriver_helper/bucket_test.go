@@ -38,7 +38,7 @@ func TestBucketSingleContents(t *testing.T) {
 		`)
 	defer s.Close()
 
-	b := NewBucketWithURL(s.URL)
+	b := NewBucket(s.URL)
 	release, err := b.LatestRelease("linux32")
 	if err != nil {
 		t.Fatalf(err.Error())
@@ -81,7 +81,7 @@ func TestBucketMultiPlatformContents(t *testing.T) {
 		`)
 	defer s.Close()
 
-	b := NewBucketWithURL(s.URL)
+	b := NewBucket(s.URL)
 	release, err := b.LatestRelease("linux32")
 	if err != nil {
 		t.Fatalf(err.Error())
@@ -124,7 +124,7 @@ func TestBucketMultiVersionContents(t *testing.T) {
 		`)
 	defer s.Close()
 
-	b := NewBucketWithURL(s.URL)
+	b := NewBucket(s.URL)
 	release, err := b.LatestRelease("linux32")
 	if err != nil {
 		t.Fatalf(err.Error())
