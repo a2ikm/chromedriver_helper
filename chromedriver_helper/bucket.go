@@ -3,6 +3,7 @@ package chromedriver_helper
 import (
 	"encoding/xml"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"regexp"
@@ -28,7 +29,6 @@ type Releases []*Release
 
 type Release struct {
 	Bucket       *Bucket
-	Key          string
 	MajorVersion int
 	MinorVersion int
 	Platform     string
@@ -115,7 +115,6 @@ func (b *Bucket) loadReleases(platform string) (Releases, error) {
 
 		release := &Release{
 			Bucket:       b,
-			Key:          c.Key,
 			MajorVersion: major,
 			MinorVersion: minor,
 			Platform:     platform,
@@ -129,7 +128,11 @@ func (b *Bucket) loadReleases(platform string) (Releases, error) {
 }
 
 func (r *Release) URL() string {
-	return strings.Join([]string{r.Bucket.URL, r.Key}, "")
+	return strings.Join([]string{r.Bucket.URL, r.Key()}, "")
+}
+
+func (r *Release) Key() string {
+	return fmt.Sprintf("%d.%d/chromedriver_%s.zip", r.MajorVersion, r.MinorVersion, r.Platform)
 }
 
 func (s Releases) Len() int {

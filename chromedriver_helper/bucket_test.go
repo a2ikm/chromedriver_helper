@@ -48,7 +48,7 @@ func TestBucketSingleContents(t *testing.T) {
 
 	assert.Equal(t, 2, release.MajorVersion)
 	assert.Equal(t, 0, release.MinorVersion)
-	assert.Equal(t, "2.0/chromedriver_linux32.zip", release.Key)
+	assert.Equal(t, "2.0/chromedriver_linux32.zip", release.Key())
 }
 
 func TestBucketMultiPlatformContents(t *testing.T) {
@@ -91,7 +91,7 @@ func TestBucketMultiPlatformContents(t *testing.T) {
 
 	assert.Equal(t, 2, release.MajorVersion)
 	assert.Equal(t, 0, release.MinorVersion)
-	assert.Equal(t, "2.0/chromedriver_linux32.zip", release.Key)
+	assert.Equal(t, "2.0/chromedriver_linux32.zip", release.Key())
 }
 
 func TestBucketMultiVersionContents(t *testing.T) {
@@ -134,5 +134,5 @@ func TestBucketMultiVersionContents(t *testing.T) {
 
 	assert.Equal(t, 2, release.MajorVersion)
 	assert.Equal(t, 10, release.MinorVersion)
-	assert.Equal(t, "2.10/chromedriver_linux32.zip", release.Key)
+	assert.Equal(t, "2.10/chromedriver_linux32.zip", release.Key())
 }
